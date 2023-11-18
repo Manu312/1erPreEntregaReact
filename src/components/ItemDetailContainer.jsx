@@ -1,30 +1,14 @@
 import React from "react";
-import { useEffect, useState } from 'react'
-import { Button,Flex,useToast } from '@chakra-ui/react';
-import ItemList from "./ItemList";
-import {useParams} from 'react-router-dom';
+import ItemDetail from "./itemDetail";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
-const ItemListContainer = ({greeting}) => {
-
-    const {category} = useParams();
-    const toast = useToast()
-
+const ItemDetailContainer = () => {
+    const {id} = useParams();  
     const [productos, setProductos] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    const  addToCart = () => {
-        toast({
-            title: "Producto agregado al carrito",
-            description: `El producto se agrego correctamente, cantidad: ${count}`,
-            status: "success",
-            duration: 1500,
-            isClosable: true,
-        })
-    };
-
     const obtenerData = new  Promise(async(resolve, reject) => {
       try{
-        await new Promise(innerResolve => setTimeout(innerResolve, 2000));
+        await new Promise(innerResolve => setTimeout(innerResolve, 100));
         //const response = await fetch('https://fakestoreapi.com/products');
         //const data = await response.json();
         const data = [
@@ -41,24 +25,30 @@ const ItemListContainer = ({greeting}) => {
     useEffect(() => {
         obtenerData.then((data) => {
           setProductos(data);
-          setLoading(false);
         })
         .catch((error) => {
           console.log(error);
         });
     }, [productos]);
-    const productosFiltrados = productos.filter((p)=>p.category===category);
+  /*
     return(
         <div>
-            <h1>{greeting}</h1>
-      {loading ? (
+            <h1>ItemDetailContainer</h1>
+            {loading ? (
         <p>Cargando productos...</p>
       ) : (
         <ul>
-          <ItemList items={productosFiltrados}/>
+          <ItemDetail Item={item}/>
         </ul>
       )}
+            
         </div>
-    )
-}
-export default ItemListContainer;
+    )*/
+    return(
+      <div>
+        <ItemDetail productos={productos}/>
+      </div>
+    );
+};
+
+export default ItemDetailContainer;
