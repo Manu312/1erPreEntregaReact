@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 const ItemDetailContainer = () => {
     const {id} = useParams();  
-    const [productos, setProductos] = useState([]);
+    const [producto, setProducto] = useState([]);
     const obtenerData = new  Promise(async(resolve, reject) => {
       try{
         await new Promise(innerResolve => setTimeout(innerResolve, 100));
@@ -24,12 +24,12 @@ const ItemDetailContainer = () => {
 
     useEffect(() => {
         obtenerData.then((data) => {
-          setProductos(data);
+          setProducto(data.find((p) => p.id == id));
         })
         .catch((error) => {
           console.log(error);
         });
-    }, [productos]);
+    }, [producto]);
   /*
     return(
         <div>
@@ -46,7 +46,7 @@ const ItemDetailContainer = () => {
     )*/
     return(
       <div>
-        <ItemDetail productos={productos}/>
+        <ItemDetail item={producto}/>
       </div>
     );
 };

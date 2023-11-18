@@ -4,24 +4,9 @@ import useCounter from '../hooks/useCounter.js';
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-const ItemDetail = ({productos}) => {
-    const {id} = useParams();
+const ItemDetail = ({item}) => {
     const {count, increment,decrement} = useCounter(0,1);
-    const [item, setItem] = useState(null);
 
-    const mostrarInfo = async () => {
-        await new Promise(innerResolve => setTimeout(innerResolve, 100));
-      };
-    
-      useEffect(() => {
-        mostrarInfo()
-          .then(() => {
-            setItem(productos.find((p) => p.id == id));
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }, [id]);
     return(
         <div>
         {item ? (
