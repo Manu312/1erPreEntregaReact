@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect, useState } from 'react'
 import { Button,Flex,useToast } from '@chakra-ui/react';
 import ItemList from "./ItemList";
+import { collection, getDocs, getFirestore } from "firebase/firestore";
 import {useParams} from 'react-router-dom';
 
 const ItemListContainer = ({greeting}) => {
@@ -22,7 +23,7 @@ const ItemListContainer = ({greeting}) => {
         })
     };
 
-    const obtenerData = new  Promise(async(resolve, reject) => {
+    /*const obtenerData = new  Promise(async(resolve, reject) => {
       try{
         await new Promise(innerResolve => setTimeout(innerResolve, 2000));
         //const response = await fetch('https://fakestoreapi.com/products');
@@ -36,18 +37,24 @@ const ItemListContainer = ({greeting}) => {
       }catch(error){
         reject(error);
       }
-    });
+    });*/
 
     useEffect(() => {
-        obtenerData.then((data) => {
-          setProductos(data);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.log(error);
+      const db = getFirestore();
+
+      const itemsCollection = collection(db,"zapatillas");
+
+      getDocs(itemsCollection).then((snapshot) => {
+        const docs = snapshot.docs.map((doc) => {
+          let documento = {
+            ...doc.data(), id: doc.id
+          }
+          return documento;
         });
+        setProductos(docs);
+        setLoading(false);
+      });
     }, [productos]);
-    const productosFiltrados = productos.filter((p)=>p.category===category);
     return(
         <div>
             <h1>{greeting}</h1>
@@ -55,7 +62,7 @@ const ItemListContainer = ({greeting}) => {
         <p>Cargando productos...</p>
       ) : (
         <ul>
-          <ItemList items={productosFiltrados}/>
+          <ItemList items={productos}/>
         </ul>
       )}
         </div>

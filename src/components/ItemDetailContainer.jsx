@@ -1,11 +1,13 @@
 import React from "react";
 import ItemDetail from "./itemDetail";
 import { useParams } from "react-router-dom";
+import {getDoc, doc, getFirestore} from 'firebase/firestore';
 import { useEffect, useState } from "react";
 
 const ItemDetailContainer = () => {
     const {id} = useParams();  
     const [producto, setProducto] = useState([]);
+    /*
     const obtenerData = new  Promise(async(resolve, reject) => {
       try{
         await new Promise(innerResolve => setTimeout(innerResolve, 100));
@@ -20,14 +22,21 @@ const ItemDetailContainer = () => {
       }catch(error){
         reject(error);
       }
-    });
+    });*/
 
     useEffect(() => {
-        obtenerData.then((data) => {
-          setProducto(data.find((p) => p.id == id));
-        })
-        .catch((error) => {
-          console.log(error);
+        const db = getFirestore();
+
+        const oneItem = doc(db, "zapatillas", id);
+
+        getDoc(oneItem).then((snapshot) => {
+
+          if(snapshot.exists()){
+            const docs = snapshot.data();
+            setProducto(docs);
+          }else{
+            console.log("No existe el producto solicitado");
+          }
         });
     }, [producto]);
   /*

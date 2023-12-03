@@ -5,8 +5,8 @@ import React from "react";
 const Item = ({ item }) => {
     return (
         <div>
-            <p>{item.title}</p>
-            <img src={item.pictureUrl}/>
+            <p>{item.nombre}</p>
+            <img src={item.imagen}/>
             <Link to={`/item/${item.id}`}>
                 <Button>Ver Detalle</Button>
             </Link>
