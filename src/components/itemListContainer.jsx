@@ -41,9 +41,15 @@ const ItemListContainer = ({greeting}) => {
 
     useEffect(() => {
       const db = getFirestore();
-
-      const itemsCollection = collection(db,"zapatillas");
-
+      const itemsCollection = collection(db,"Indumentaria");
+      console.log(category)
+      new  Promise(async(resolve, reject) => {
+        if(category!==undefined){
+          await new Promise(innerResolve => setTimeout(innerResolve, 2000));
+          itemsCollection = collection(db,category);
+        }
+      });
+      console.log(itemsCollection)
       getDocs(itemsCollection).then((snapshot) => {
         const docs = snapshot.docs.map((doc) => {
           let documento = {
